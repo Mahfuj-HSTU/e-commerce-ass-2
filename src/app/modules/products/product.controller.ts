@@ -5,14 +5,13 @@ import { ProductServices } from './product.service';
 
 const addProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { password, student: productData } = req.body;
+    const product = req.body;
+    // console.log(product);
+    const result = await ProductServices.addProductIntotDb(product);
 
-    const result = await ProductServices.addProductIntotDb(
-      password,
-      productData
-    );
     sendResponse(res, {
       success: true,
+      message: 'Product created successfully',
       statusCode: httpStatus.OK,
       data: result,
     });
