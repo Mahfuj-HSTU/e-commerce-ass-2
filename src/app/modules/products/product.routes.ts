@@ -1,15 +1,15 @@
 import express, { NextFunction, Request, Response } from 'express';
 import { ProductController } from './product.controller';
 import validateRequest from '../../middlwares/validateRequest';
+import { productValidations } from './product.zod.validation';
 
 const router = express.Router();
 
-// will call controller function
-// router.post(
-//   '/create-student',
-//   validateRequest(studentValidations.createStudentValidationSchema),
-//   UserController.createStudent
-// );
-router.post('/', ProductController.addProduct);
+router.post(
+  '/',
+  validateRequest(productValidations.createProductValidationSchema),
+  ProductController.addProduct
+);
+router.get('/', ProductController.getAllProducts);
 
 export const ProductRoutes = router;

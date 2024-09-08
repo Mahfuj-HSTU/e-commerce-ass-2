@@ -14,13 +14,15 @@ export const inventorySchema = z.object({
 
 //* Product validation schema
 const createProductValidationSchema = z.object({
-  name: z.string().nonempty('Name is required'),
-  description: z.string().nonempty('Description is required'),
-  price: z.number().positive('Price must be a positive number'),
-  category: z.string().nonempty('Category is required'),
-  tags: z.array(z.string()).optional(),
-  variants: z.array(variantSchema),
-  inventory: inventorySchema,
+  body: z.object({
+    name: z.string().nonempty('Name is required'),
+    description: z.string().nonempty('Description is required'),
+    price: z.number().positive('Price must be a positive number'),
+    category: z.string().nonempty('Category is required'),
+    tags: z.array(z.string()).optional(),
+    variants: z.array(variantSchema),
+    inventory: inventorySchema,
+  }),
 });
 
 export const productValidations = {
