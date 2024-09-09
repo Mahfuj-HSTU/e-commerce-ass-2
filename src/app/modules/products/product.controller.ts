@@ -56,8 +56,35 @@ const getSingleProduct = async (req: Request, res: Response) => {
   }
 };
 
+const updateProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { productId } = req.params;
+    const updatedProduct = req.body;
+    const result = await ProductServices.updateProductIntoDb(
+      productId,
+      updatedProduct
+    );
+    res.status(200).json({
+      success: true,
+      message: 'Products updated successfully!',
+      data: result,
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: err.message || 'Something went wrong',
+      error: err,
+    });
+  }
+};
+
 export const ProductController = {
   addProduct,
   getAllProducts,
   getSingleProduct,
+  updateProduct,
 };
