@@ -35,10 +35,28 @@ const deleteProductFromDb = async (productId: string) => {
   return result;
 };
 
+const searchProductFromDb = async (searchTerm: string) => {
+  const regex = new RegExp(searchTerm, 'i');
+  const searchNumber = parseFloat(searchTerm);
+
+  const result = await Product.find({
+    $or: [
+      { name: regex },
+      { category: regex },
+      { description: regex },
+      { tags: { $in: [regex] } },
+      { price: !isNaN(searchNumber) ? searchNumber : undefined },
+    ].filter(Boolean),
+  });
+
+  return result;
+};
+
 export const ProductServices = {
   addProductIntotDb,
   getAllProductsFromDb,
   getSingleProductsFromDb,
   updateProductIntoDb,
   deleteProductFromDb,
+  searchProductFromDb,
 };

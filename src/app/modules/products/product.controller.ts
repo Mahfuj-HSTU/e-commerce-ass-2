@@ -15,29 +15,45 @@ const addProduct = async (req: Request, res: Response, next: NextFunction) => {
       statusCode: httpStatus.OK,
       data: result,
     });
-  } catch (err: any) {
+  } catch (err) {
     next(err);
   }
 };
 
-const getAllProducts = async (req: Request, res: Response) => {
+const getAllProducts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const result = await ProductServices.getAllProductsFromDb();
-    res.status(200).json({
-      success: true,
-      message: 'Products fetched successfully!',
-      data: result,
-    });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || 'Something went wrong',
-      error: err,
-    });
+    const { searchTerm } = req.query;
+    if (searchTerm) {
+      const result = await ProductServices.searchProductFromDb(
+        searchTerm as string
+      );
+      res.status(200).json({
+        success: true,
+        message: `Products matching search term ${searchTerm} fetched successfully!`,
+        data: result,
+      });
+    } else {
+      const result = await ProductServices.getAllProductsFromDb();
+      res.status(200).json({
+        success: true,
+        message: 'Products fetched successfully!',
+        data: result,
+      });
+    }
+  } catch (err) {
+    next(err);
   }
 };
 
-const getSingleProduct = async (req: Request, res: Response) => {
+const getSingleProduct = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { productId } = req.params;
     const result = await ProductServices.getSingleProductsFromDb(productId);
@@ -47,12 +63,8 @@ const getSingleProduct = async (req: Request, res: Response) => {
       message: 'Products fetched successfully!',
       data: result,
     });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || 'Something went wrong',
-      error: err,
-    });
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -73,12 +85,8 @@ const updateProduct = async (
       message: 'Products updated successfully!',
       data: result,
     });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || 'Something went wrong',
-      error: err,
-    });
+  } catch (err) {
+    next(err);
   }
 };
 
@@ -89,20 +97,39 @@ const deleteProduct = async (
 ) => {
   try {
     const { productId } = req.params;
-    const result = await ProductServices.deleteProductFromDb(productId);
+    await ProductServices.deleteProductFromDb(productId);
+
     res.status(200).json({
       success: true,
       message: 'Product deleted successfully!',
       data: null,
     });
-  } catch (err: any) {
-    res.status(500).json({
-      success: false,
-      message: err.message || 'Something went wrong',
-      error: err,
-    });
+  } catch (err) {
+    next(err);
   }
 };
+
+// const searchProduct = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     // console.log(req.params);
+//     // console.log(req);
+//     const { searchTerm } = req.params;
+//     const result = await ProductServices.searchProductFromDb(
+//       searchTerm as string
+//     );
+//     res.status(200).json({
+//       success: true,
+//       message: `Products matching search term ${searchTerm} fetched successfully!`,
+//       data: result,
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 export const ProductController = {
   addProduct,
