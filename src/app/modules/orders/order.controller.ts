@@ -11,7 +11,6 @@ const addOrder = async (req: Request, res: Response, next: NextFunction) => {
 
     //* Fetch product details from the database
     const product = await ProductServices.getSingleProductsFromDb(productId);
-
     if (product) {
       if (order.quantity > product.inventory.quantity) {
         return res.status(400).json({
@@ -23,14 +22,6 @@ const addOrder = async (req: Request, res: Response, next: NextFunction) => {
       const newQuantity = product.inventory.quantity - order.quantity;
       // console.log(newQuantity);
       const inStockStatus = newQuantity > 0;
-      // const updatedOrderedProduct = {
-      //   ...product,
-      //   inventory: {
-      //     quantity: newQuantity,
-      //     inStock: inStockStatus,
-      //   },
-      // };
-      // console.log('updated product =>', updatedOrderedProduct);
 
       await ProductServices.updateProductIntoDb(productId, {
         $set: {
@@ -38,9 +29,7 @@ const addOrder = async (req: Request, res: Response, next: NextFunction) => {
           'inventory.inStock': inStockStatus,
         },
       });
-
       const result = await OrderService.addOrderIntoDb(order);
-
       sendResponse(res, {
         success: true,
         message: 'Order created successfully',
@@ -53,6 +42,21 @@ const addOrder = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const getAllOrder = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await OrderService.getAllOrderFromDb();
+    sendResponse(res, {
+      success: true,
+      message: 'Orders fetched successfully!',
+      statusCode: httpStatus.OK,
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const OrderController = {
   addOrder,
+  getAllOrder,
 };

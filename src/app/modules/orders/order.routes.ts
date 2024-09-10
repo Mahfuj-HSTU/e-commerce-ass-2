@@ -10,7 +10,7 @@ router.post(
   validateRequest(ordertValidations.createOrderValidationSchema),
   OrderController.addOrder
 );
-router.get('/');
+router.get('/', OrderController.getAllOrder);
 router.get('/:productId');
 
 export const OrderRoutes = router;
