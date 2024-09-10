@@ -1,7 +1,7 @@
 import { TOrder } from './order.interface';
 import { Order } from './order.model';
 
-const addOrderIntotDb = async (orderData: TOrder) => {
+const addOrderIntoDb = async (orderData: TOrder) => {
   const order = new Order(orderData);
 
   const result = await order.save();
@@ -9,5 +9,5 @@ const addOrderIntotDb = async (orderData: TOrder) => {
 };
 
 export const OrderService = {
-  addOrderIntotDb,
+  addOrderIntoDb,
 };
