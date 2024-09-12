@@ -60,7 +60,7 @@ const getSingleProduct = async (
 
     res.status(200).json({
       success: true,
-      message: 'Products fetched successfully!',
+      message: 'Product fetched successfully!',
       data: result,
     });
   } catch (err) {

@@ -1,3 +1,4 @@
+import { UpdateQuery } from 'mongoose';
 import { TProduct } from './product.interface';
 import { Product } from './product.model';
 
@@ -20,7 +21,7 @@ const getSingleProductsFromDb = async (productId: string) => {
 
 const updateProductIntoDb = async (
   productId: string,
-  updatedProductData: TProduct
+  updatedProductData: UpdateQuery<Partial<TProduct>>
 ) => {
   const updatedProduct = await Product.findByIdAndUpdate(
     productId,

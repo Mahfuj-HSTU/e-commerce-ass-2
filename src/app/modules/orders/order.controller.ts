@@ -3,6 +3,8 @@ import { OrderService } from './order.service';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 import { ProductServices } from '../products/product.service';
+import { UpdateQuery } from 'mongoose';
+import { TProduct } from '../products/product.interface';
 
 const addOrder = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -23,12 +25,14 @@ const addOrder = async (req: Request, res: Response, next: NextFunction) => {
       // console.log(newQuantity);
       const inStockStatus = newQuantity > 0;
 
-      await ProductServices.updateProductIntoDb(productId, {
+      const updateData: UpdateQuery<Partial<TProduct>> = {
         $set: {
           'inventory.quantity': newQuantity,
           'inventory.inStock': inStockStatus,
         },
-      });
+      };
+
+      await ProductServices.updateProductIntoDb(productId, updateData);
       const result = await OrderService.addOrderIntoDb(order);
       sendResponse(res, {
         success: true,
