@@ -11,6 +11,6 @@ router.post(
   OrderController.addOrder
 );
 router.get('/', OrderController.getAllOrder);
-router.get('/:productId');
+// router.get('/:email', OrderController.getOrderByEmail);
 
 export const OrderRoutes = router;

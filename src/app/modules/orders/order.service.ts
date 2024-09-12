@@ -13,7 +13,14 @@ const getAllOrderFromDb = async () => {
   return result;
 };
 
+const getOrderByEmailFromDb = async (email: string) => {
+  const result = await Order.find({ email: email });
+  // console.log(result);
+  return result;
+};
+
 export const OrderService = {
   addOrderIntoDb,
   getAllOrderFromDb,
+  getOrderByEmailFromDb,
 };
